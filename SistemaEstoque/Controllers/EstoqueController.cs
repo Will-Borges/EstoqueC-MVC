@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SistemaEstoque.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,12 +11,14 @@ namespace SistemaEstoque.Controllers
     {
         // GET: Estoque
         public ActionResult Index()
-        {
+        {           
             return View();
         }
 
         public ActionResult EntradaEstoque()
         {
+            DBContext db = new DBContext();
+            ViewBag.ProdutosDescricao = new SelectList(db.Produtos, "id","descricao");
             return View();
         }
     }

@@ -1,10 +1,10 @@
 ﻿@model SistemaEstoque.Models.Classes
 
 @{
-    ViewBag.Title = "Cadastro";
+    ViewBag.Title = "Registrar Entrada no Estoque";
 }
 
-<h1>Cadastro de Produtos</h1>
+<h1>@ViewBag.Title</h1>
 
 
 @using (Html.BeginForm())
@@ -37,18 +37,11 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Produto.Referencia, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(model => model.Produto.Referencia, new SelectList(new string[] {
+            @*@Html.DropDownListFor(model => model.Produto.Referencia, new SelectList(new string[] { model.DBContext.Produtos }))*@
+            @Html.DropDownList("ProdutosDescricao", "Selecione uma referência")
+            @Html.DropDownList("ProdutosDescricao", (MultiSelectList)ViewBag.Categorias, new { @class = "form-control" })
+            @Html.DropDownList("ProdutosDescricao", null, htmlAttributes: new { @class = "form-control" })
 
-           var context = new DBContext()
-            foreach (var login in Model.DBContext.Produtos)
-            {
-                if (usuario == login.Usuario & senha == login.Senha)
-                {
-                    return true;
-                    }
-                }
-
-            }), new { @class = "form-control" })
         </div>
     </div>
 
