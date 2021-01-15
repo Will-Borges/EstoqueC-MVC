@@ -11,6 +11,8 @@
 {
     @Html.AntiForgeryToken()
 
+<div class="recebeDados"></div>
+
 <div class="form-horizontal">
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -22,26 +24,24 @@
     </div>
 
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Pesquisar" class="btn btn-default" />
+        <div class="col-md-offset-2 col-md-10" id="btnProduto_Codigo">
+            <input value="Pesquisar" class="btn btn-default" />
         </div>
     </div>
 
     <div class="form-group">
         @Html.LabelFor(model => model.Produto.Descricao, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Produto.Descricao, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.DropDownList("ProdutosDescricao", (MultiSelectList)ViewBag.Categorias, new { @class = "form-control" })
+            @*@Html.DropDownListFor(model => model.Produto.Descricao, new SelectList(Model.Produto.Descricao, "id", "descricao"), new { @class = "form-control" })*@
+            @*@Html.DropDownList("ProdutosDescricao", null, htmlAttributes: new { @class = "form-control" })*@
         </div>
     </div>
 
     <div class="form-group">
         @Html.LabelFor(model => model.Produto.Referencia, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @*@Html.DropDownListFor(model => model.Produto.Referencia, new SelectList(new string[] { model.DBContext.Produtos }))*@
-            @Html.DropDownList("ProdutosDescricao", "Selecione uma referência")
-            @Html.DropDownList("ProdutosDescricao", (MultiSelectList)ViewBag.Categorias, new { @class = "form-control" })
-            @Html.DropDownList("ProdutosDescricao", null, htmlAttributes: new { @class = "form-control" })
-
+            @Html.EditorFor(model => model.Produto.Referencia, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
         </div>
     </div>
 
@@ -92,5 +92,54 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).ready(function () {
+
+            // Acao Seletor
+            $("#ProdutosDescricao").change(function () {
+                var IdDescricao = $("#ProdutosDescricao option:selected").val();
+                
+                $.ajax({
+                    url: '/api/Estoque/ObterProdutoSeletor/' + IdDescricao,
+                    type: 'GET',
+                    data: IdDescricao,
+                    success: function (data) {
+                        $("#Produto_Codigo").val(data.Codigo);
+                        $("#Produto_Referencia").val(data.Referencia); 
+                        $("#Produto_UnidadeMedida").val(data.UnidadeMedida); 
+                        $("#Produto_Valor").val(data.Valor); 
+                    }
+                });
+            });
+
+            // Botão Codigo
+            $("#btnProduto_Codigo").click(function () {
+                var codigo = $("#Produto_Codigo").val();
+
+                $.ajax({
+                    url: '/api/Estoque/ObterProdutoCodigo/' + codigo,
+                    type: 'GET',
+                    data: codigo,
+                    success: function (data) {
+                        $("#Produto_Referencia").val(data.Referencia);
+                        $("#Produto_UnidadeMedida").val(data.UnidadeMedida);
+                        $("#Produto_Valor").val(data.Valor);
+                    }
+                });
+            });
+
+        });
+
+
+
+
+    @*outro tipo de metodo
+       $("#ProdutosDescricao").on("change", function () {
+       console.log("change happens");
+   });*@
+
+    </script>
 }
 

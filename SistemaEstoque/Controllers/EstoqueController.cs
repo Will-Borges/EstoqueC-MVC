@@ -21,5 +21,14 @@ namespace SistemaEstoque.Controllers
             ViewBag.ProdutosDescricao = new SelectList(db.Produtos, "id","descricao");
             return View();
         }
+
+        [HttpPost]
+        public ActionResult EntradaEstoque(string value)
+        {
+            DBContext db = new DBContext();
+            ViewBag.ProdutosDescricao = new SelectList(db.Produtos, "id", "descricao");
+            return View();
+        }
+
     }
 }
