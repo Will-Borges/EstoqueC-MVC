@@ -24,16 +24,7 @@
             @Html.DisplayNameFor(model => model.UnidadeMedida)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Quantidade)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.NCM)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Valor)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DataCompra)
         </th>
         <th></th>
     </tr>
@@ -56,16 +47,7 @@
         @Html.DisplayFor(modelItem => item.UnidadeMedida)
     </td>
     <td>
-        @Html.DisplayFor(modelItem => item.Quantidade)
-    </td>
-    <td>
         @Html.DisplayFor(modelItem => item.NCM)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Valor)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.DataCompra)
     </td>
     <td>
         @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |

@@ -1,7 +1,62 @@
-﻿
+﻿@model IEnumerable <SistemaEstoque.ViewModel.ProdutoEstoque>
+
 @{
     ViewBag.Title = "Estoque";
 }
 
-<h2>Ainda estamos desenvolvendo essa página.</h2>
+<b><h1>Produtos</h1></b>
+
+<table class="table">
+    <tr>
+        <th>
+            <b>@Html.DisplayNameFor(model => model.idEstoque)</b>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Codigo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Valor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantidade)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dataEntrada)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.idEstoque)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Valor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dataEntrada)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", new { idEstoque = item.idEstoque }) |
+                @Html.ActionLink("Excluir", "Delete", new { idEstoque = item.idEstoque })
+            </td>
+        </tr>
+    }
+
+</table>
 

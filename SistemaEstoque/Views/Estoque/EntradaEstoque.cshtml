@@ -1,4 +1,4 @@
-﻿@model SistemaEstoque.Models.Classes
+﻿@model SistemaEstoque.ViewModel.ProdutoEstoque
 
 @{
     ViewBag.Title = "Registrar Entrada no Estoque";
@@ -7,8 +7,8 @@
 <h1>@ViewBag.Title</h1>
 
 
-@using (Html.BeginForm())
-{
+@using (Html.BeginForm("EntradaEstoque", "Estoque", FormMethod.Post)) { 
+
     @Html.AntiForgeryToken()
 
 <div class="recebeDados"></div>
@@ -17,9 +17,9 @@
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(model => model.Produto.Codigo, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Codigo, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Produto.Codigo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.Codigo, new { htmlAttributes = new { @class = "form-control" } })
         </div>
     </div>
 
@@ -30,7 +30,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Produto.Descricao, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Descricao, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.DropDownList("ProdutosDescricao", (MultiSelectList)ViewBag.Categorias, new { @class = "form-control" })
             @*@Html.DropDownListFor(model => model.Produto.Descricao, new SelectList(Model.Produto.Descricao, "id", "descricao"), new { @class = "form-control" })*@
@@ -39,43 +39,47 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Produto.Referencia, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Referencia, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Produto.Referencia, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.EditorFor(model => model.Referencia, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Produto.UnidadeMedida, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.UnidadeMedida, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Produto.UnidadeMedida, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.EditorFor(model => model.UnidadeMedida, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             @*@Html.ValidationMessageFor(model => model.UnidadeMedida, "", new { @class = "text-danger" })*@
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Produto.Quantidade, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Quantidade, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Produto.Quantidade, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.Quantidade, new { htmlAttributes = new { @class = "form-control" } })
             @*@Html.ValidationMessageFor(model => model.Quantidade, "", new { @class = "text-danger" })*@
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Produto.Valor, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Valor, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Produto.Valor, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.EditorFor(model => model.Valor, new { htmlAttributes = new { @class = "form-control" } })
             @*@Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })*@
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Produto.DataCompra, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.dataEntrada, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Produto.DataCompra, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.dataEntrada, new { htmlAttributes = new { @class = "form-control" } })
             @*@Html.ValidationMessageFor(model => model.DataCompra, "", new { @class = "text-danger" })*@
         </div>
     </div>
+
+    @Html.EditorFor(model => model.FK_Produto, new { htmlAttributes = new { @class = "form-control", type="hidden" } })
+    @Html.EditorFor(model => model.IdProduto, new { htmlAttributes = new { @class = "form-control", type = "hidden" } })
+    @Html.EditorFor(model => model.Descricao, new { htmlAttributes = new { @class = "form-control", type = "hidden" } })
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
@@ -99,19 +103,24 @@
 
             // Acao Seletor
             $("#ProdutosDescricao").change(function () {
-                var IdDescricao = $("#ProdutosDescricao option:selected").val();
+                var idDescricao = $("#ProdutosDescricao option:selected").val();
+                var textDescricao = $("#ProdutosDescricao option:selected").text();
                 
                 $.ajax({
-                    url: '/api/Estoque/ObterProdutoSeletor/' + IdDescricao,
+                    url: '/api/Estoque/ObterProdutoSeletor/' + idDescricao,
                     type: 'GET',
-                    data: IdDescricao,
+                    data: idDescricao,
                     success: function (data) {
-                        $("#Produto_Codigo").val(data.Codigo);
-                        $("#Produto_Referencia").val(data.Referencia); 
-                        $("#Produto_UnidadeMedida").val(data.UnidadeMedida); 
-                        $("#Produto_Valor").val(data.Valor); 
+                        $("#Codigo").val(data.Codigo);
+                        $("#Referencia").val(data.Referencia); 
+                        $("#UnidadeMedida").val(data.UnidadeMedida); 
+                        $("#Valor").val(data.Valor); 
+                        $("#FK_idProduto").val(idDescricao); 
+                        $("#IdProduto").val(idDescricao); 
+                        $("#Descricao").val(textDescricao);                   
                     }
                 });
+               
             });
 
             // Botão Codigo

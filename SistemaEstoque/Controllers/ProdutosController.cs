@@ -17,6 +17,7 @@ namespace SistemaEstoque.Controllers
         // GET: Produtos
         public ActionResult Index()
         {
+
             return View(db.Produtos.ToList());
         }
 
@@ -46,7 +47,7 @@ namespace SistemaEstoque.Controllers
         // Para obter mais detalhes, confira https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Codigo,Descricao,Referencia,UnidadeMedida,Quantidade,NCM,Valor,DataCompra")] Produto produto)
+        public ActionResult Create([Bind(Include = "Id,Codigo,Descricao,Referencia,UnidadeMedida,NCM")] Produto produto)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +79,7 @@ namespace SistemaEstoque.Controllers
         // Para obter mais detalhes, confira https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Codigo,Descricao,Referencia,UnidadeMedida,Quantidade,NCM,Valor,DataCompra")] Produto produto)
+        public ActionResult Edit([Bind(Include = "Id,Codigo,Descricao,Referencia,UnidadeMedida,NCM")] Produto produto)
         {
             if (ModelState.IsValid)
             {

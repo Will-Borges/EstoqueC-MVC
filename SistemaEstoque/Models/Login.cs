@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -7,7 +8,8 @@ namespace SistemaEstoque.Models
 {
     public class Login
     {
-        public int Id { get; set; }
+        [Key]
+        public int IdLogin { get; set; }
         public string Usuario { get; set; }
         public string Senha { get; set; }
 

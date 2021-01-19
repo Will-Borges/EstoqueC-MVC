@@ -10,5 +10,6 @@ namespace SistemaEstoque.Models
         public DBContext DBContext { get; set; }
         public Produto Produto { get; set; }
         public Login Login { get; set; }
+        public Estoque Estoque { get; set; }
     }
 }
